@@ -1,21 +1,22 @@
 # gnucobol-rs-tui
 
-gnucobol-rs Screen Section: terminal UI / screen-handling translation to terminal matrix updates.
+A COBOL **Screen Section** primitive: a 1-based `LINE`/`COL` terminal cell matrix that places `DISPLAY`
+fields, and renders numeric fields through the **oracle-proven**
+[`gnucobol-rs`](https://github.com/infinityabundance/gnucobol-rs) edited-encode court (`GNURUST.16C`) — so a
+`PIC $$,$$9.99CR` field on screen carries the exact cobc-faithful presentation bytes.
 
-A faithful-port satellite of the **gnucobol-rs** ecosystem -- an oracle-first Rust compatibility court for
-GnuCOBOL 3.2 (byte-exact vs the real cobc/libcob, fail-closed, receipt-backed). This crate ports: Screen Section / terminal I/O (libcob/screenio.c).
+```rust
+use gnucobol_rs_tui::Screen;
+use gnucobol_rs::Decimal;
 
-## Profile
-Intended: **std (terminal buffers); no_unsafe**.
+let mut s = Screen::new(2, 12);
+s.put(1, 1, b"BALANCE:");
+s.put_edited(2, 1, &Decimal { negative: true, digits: vec![1,2,5], scale: 1 }, "$$,$$9.99CR").unwrap();
+assert_eq!(s.line_str(2).trim_end(), "   $12.50CR");
+```
 
-## Ecosystem
-- gnucobol-rs (core) = oracle-proven data-division primitives (PIC, layout, COMP-3, MOVE, VALUE, arithmetic).
-- gnucobol-rs-exec / -io / -intrinsics / -link / -tui = the modular runtime satellites (this is one).
-- gnucobol-rs-* MAY depend on the gnucobol-rs core; the core MUST NOT depend on a satellite.
-- kobold-* (Apache-2.0, separate repos) = the forensic-intelligence layer ABOVE the ecosystem.
+Screen *positioning* is a from-scratch primitive (cobc's `screenio.c` is not yet a sealed court); the
+numeric/edited *content* it places is court-backed via `GNURUST.16C`.
 
 ## License
-**LGPL-3.0-or-later** (faithful derivative of GnuCOBOL/libcob; FSF copyright retained). See COPYING.LESSER + COPYING.
-
-## Status
-Scaffold only -- repo initialized, no implementation yet. Implementation follows the split/planning pass.
+LGPL-3.0-or-later — a faithful derivative of GnuCOBOL/libcob (FSF copyright retained). See COPYING.LESSER (+ COPYING).

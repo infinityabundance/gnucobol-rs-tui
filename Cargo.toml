@@ -2,13 +2,14 @@
 name = "gnucobol-rs-tui"
 version = "0.1.0"
 edition = "2021"
-description = "gnucobol-rs Screen Section: terminal UI / screen-handling translation to terminal matrix updates."
+description = "gnucobol-rs Screen Section: a 1-based LINE/COL terminal cell matrix that places DISPLAY fields and renders numeric fields through the oracle-proven gnucobol-rs edited-encode court."
 authors = ["infinityabundance"]
 license = "LGPL-3.0-or-later"
 repository = "https://github.com/infinityabundance/gnucobol-rs-tui"
 readme = "README.md"
-publish = false  # empty scaffold; flip to publishable once the implementation lands
+keywords = ["cobol", "gnucobol", "screen", "tui", "terminal"]
+categories = ["encoding", "command-line-interface"]
+publish = false  # path-dep on the core for now; flip to a `gnucobol-rs = "0.7"` version dep + publish once the core is on crates.io
 
 [dependencies]
-# A faithful-port satellite of the gnucobol-rs ecosystem. Depends on the gnucobol-rs core primitives.
-# Activate when the implementation lands: gnucobol-rs = "0.7"
+gnucobol-rs = { path = "../gnucobol-rs/crates/gnucobol-rs" }
